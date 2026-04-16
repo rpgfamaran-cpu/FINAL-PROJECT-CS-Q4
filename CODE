@@ -1,0 +1,97 @@
+import json
+
+ 
+
+# Load data from JSON file
+
+def load_data(filename='NOSQL.json'):
+
+    try:
+
+        with open(filename, 'r') as file:
+
+            return json.load(file)
+
+    except (FileNotFoundError, json.JSONDecodeError):
+
+        return []
+
+ 
+
+# Save data to JSON file
+
+def save_data(data, filename='NOSQL.json'):
+
+    with open(filename, 'w') as file:
+
+        json.dump(data, file, indent=4)
+
+ 
+
+# CREATE
+
+def create_user(new_user):
+
+    data = load_data()
+
+    data.append(new_user)
+
+    save_data(data)
+
+    print("User added.")
+
+# READ
+
+def read_users():
+
+    data = load_data()
+
+    for user in data:
+
+        print(user)
+
+# UPDATE
+
+def update_user(user_id, updated_info):
+
+    data = load_data()
+
+    for user in data:
+
+        if user['id'] == user_id:
+
+            user.update(updated_info)
+
+            save_data(data)
+
+            print("User updated.")
+
+            return
+
+    print("User not found.")
+
+# DELETE
+
+def delete_user(user_id):
+
+    data = load_data()
+
+    data = [user for user in data if user['id'] != user_id]
+
+    save_data(data)
+
+    print("User deleted.")
+
+if __name__ == "__main__":
+    # Example usage
+    # Create a user
+    create_user({"id": 1, "name": "Alice", "email": "alice@example.com"})
+    
+    # Read users
+    read_users()
+    
+    # Update a user
+    update_user(1, {"name": "Alice Updated"})
+    
+    # Delete a user
+    delete_user(1)
