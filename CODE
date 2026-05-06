@@ -45,25 +45,36 @@ def update_user():
     data = load_data()
 
     uid = int(input("Update User ID: "))
-    found = False
 
     for u in data:
         if u["id"] == uid:
-            new_name = input("New name: ")
-            new_email = input("New email: ")
-            new_grades = input("New grades: ")
+            print("What do you want to update?")
+            print("1 - Name")
+            print("2 - Email")
+            print("3 - Grades")
+            print("4 - All")
 
-            u["name"] = new_name
-            u["email"] = new_email
-            u["grades"] = new_grades
+            choice = input("Enter choice: ")
 
-            found = True
+            if choice == "1":
+                u["name"] = input("New name: ")
+            elif choice == "2":
+                u["email"] = input("New email: ")
+            elif choice == "3":
+                u["grades"] = input("New grades: ")
+            elif choice == "4":
+                u["name"] = input("New name: ")
+                u["email"] = input("New email: ")
+                u["grades"] = input("New grades: ")
+            else:
+                print("Invalid choice")
+                return
 
-    if found:
-        save_data(data)
-        print("User updated.")
-    else:
-        print("User not found.")
+            save_data(data)
+            print("User updated.")
+            return
+
+    print("User not found.")
 
 def delete_user():
     data = load_data()
