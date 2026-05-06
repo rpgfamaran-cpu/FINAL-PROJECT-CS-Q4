@@ -1,97 +1,101 @@
 import json
+import os
 
- 
+file = "data.json"
 
-# Load data from JSON file
-
-def load_data(filename='NOSQL.json'):
-
-    try:
-
-        with open(filename, 'r') as file:
-
-            return json.load(file)
-
-    except (FileNotFoundError, json.JSONDecodeError):
-
+def load_data():
+    if os.path.exists(file):
+        f = open(file, "r")
+        data = json.load(f)
+        f.close()
+        return data
+    else:
         return []
 
- 
+def save_data(data):
+    f = open(file, "w")
+    json.dump(data, f, indent=4)
+    f.close()
 
-# Save data to JSON file
-
-def save_data(data, filename='NOSQL.json'):
-
-    with open(filename, 'w') as file:
-
-        json.dump(data, file, indent=4)
-
- 
-
-# CREATE
-
-def create_user(new_user):
-
+def create_user():
     data = load_data()
 
-    data.append(new_user)
+    id = int(input("Enter ID: "))
+    name = input("Enter name: ")
+    email = input("Enter email: ")
 
+    user = {"id": id, "name": name, "email": email}
+
+    data.append(user)
     save_data(data)
 
     print("User added.")
 
-# READ
-
 def read_users():
-
     data = load_data()
 
-    for user in data:
+    if data == []:
+        print("No users found.")
+    else:
+        for u in data:
+            print("ID:", u["id"], "| Name:", u["name"], "| Email:", u["email"])
 
-        print(user)
-
-# UPDATE
-
-def update_user(user_id, updated_info):
-
+def update_user():
     data = load_data()
 
-    for user in data:
+    uid = int(input("Update User ID: "))
+    found = False
 
-        if user['id'] == user_id:
+    for u in data:
+        if u["id"] == uid:
+            new_name = input("New name: ")
+            new_email = input("New email: ")
 
-            user.update(updated_info)
+            u["name"] = new_name
+            u["email"] = new_email
 
-            save_data(data)
+            found = True
 
-            print("User updated.")
+    if found:
+        save_data(data)
+        print("User updated.")
+    else:
+        print("User not found.")
 
-            return
-
-    print("User not found.")
-
-# DELETE
-
-def delete_user(user_id):
-
+def delete_user():
     data = load_data()
 
-    data = [user for user in data if user['id'] != user_id]
+    uid = int(input("Delete User ID: "))
+    new_data = []
 
-    save_data(data)
+    for u in data:
+        if u["id"] != uid:
+            new_data.append(u)
 
-    print("User deleted.")
+    if len(new_data) == len(data):
+        print("User not found.")
+    else:
+        save_data(new_data)
+        print("User deleted.")
+while True:
 
-if __name__ == "__main__":
-    # Example usage
-    # Create a user
-    create_user({"id": 1, "name": "Alice", "email": "alice@example.com"})
-    
-    # Read users
-    read_users()
-    
-    # Update a user
-    update_user(1, {"name": "Alice Updated"})
-    
-    # Delete a user
-    delete_user(1)
+    print("1 - Add User")
+    print("2 - View Users")
+    print("3 - Update User")
+    print("4 - Delete User")
+    print("5 - Exit")
+
+    choice = input("Enter choice: ")
+
+    if choice == "1":
+        create_user()
+    elif choice == "2":
+        read_users()
+    elif choice == "3":
+        update_user()
+    elif choice == "4":
+        delete_user()
+    elif choice == "5":
+        break
+    else:
+        print("Invalid choice")
