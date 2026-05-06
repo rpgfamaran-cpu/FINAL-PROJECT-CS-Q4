@@ -23,9 +23,9 @@ def create_user():
     id = int(input("Enter ID: "))
     name = input("Enter name: ")
     email = input("Enter email: ")
-    grades = int(input("Enter grades of the student")
+    grades = input("Enter grades of the student: ")
 
-    user = {"id": id, "name": name, "email": email, "Grades": grades}
+    user = {"id": id, "name": name, "email": email, "grades": grades}
 
     data.append(user)
     save_data(data)
@@ -39,7 +39,7 @@ def read_users():
         print("No users found.")
     else:
         for u in data:
-            print("ID:", u["id"], "| Name:", u["name"], "| Email:", u["email"])
+            print("ID:", u["id"], "| Name:", u["name"], "| Email:", u["email"], "| Grades:", u["grades"])
 
 def update_user():
     data = load_data()
@@ -51,9 +51,11 @@ def update_user():
         if u["id"] == uid:
             new_name = input("New name: ")
             new_email = input("New email: ")
+            new_grades = input("New grades: ")
 
             u["name"] = new_name
             u["email"] = new_email
+            u["grades"] = new_grades
 
             found = True
 
